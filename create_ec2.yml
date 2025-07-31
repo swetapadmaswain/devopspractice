@@ -22,7 +22,7 @@
         image_id: "{{ image_id }}"
         vpc_subnet_id: "{{ subnet_id }}"
         region: "{{ region }}"
-        security_group: [ "{{ security_group_id }}" ]
+        security_group_id: [ "{{ security_group_id }}" ]
         wait: yes
         tags:
           Name: "{{ instance_name }}"
