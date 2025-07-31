@@ -1,0 +1,34 @@
+---
+- name: Create a single EC2 instance on AWS
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    region: us-east-1
+    key_name: My_key             # Replace with your AWS EC2 Key Pair
+    instance_type: t2.micro
+    image_id: ami-01b52e44c36c28fc8        # Ubuntu AMI (change for your region)
+    subnet_id: subnet-0bd51480212818207             # Replace with your subnet ID
+    security_group_id: sg-075b4355971bffe3f         # Replace with your security group ID
+    instance_name: ansible-ec2-demo
+
+  tasks:
+    - name: Launch EC2 instance
+      amazon.aws.ec2_instance:
+        name: "{{ instance_name }}"
+        key_name: "{{ key_name }}"
+        instance_type: "{{ instance_type }}"
+        image_id: "{{ image_id }}"
+        vpc_subnet_id: "{{ subnet_id }}"
+        region: "{{ region }}"
+        security_group: [ "{{ security_group_id }}" ]
+        wait: yes
+        tags:
+          Name: "{{ instance_name }}"
+          Project: "AnsibleDemo"
+      register: ec2_result
+
+    - name: Show public IP
+      debug:
+        msg: "Public IP: {{ ec2_result.instances[0].public_ip_address }}"
