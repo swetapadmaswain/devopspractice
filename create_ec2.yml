@@ -29,6 +29,6 @@
           Project: "AnsibleDemo"
       register: ec2_result
 
-    - name: Show public IP
+    - name: Show public IP (safely)
       debug:
-        msg: "Public IP: {{ ec2_info.instances[0].network_interfaces[0].association.public_ip  }}"
+        msg: "{{ ec2_info.instances[0].network_interfaces[0].association.public_ip | default('No public IP assigned') }}"
